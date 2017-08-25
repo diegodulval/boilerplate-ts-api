@@ -10,7 +10,7 @@ const server = http.createServer(Api);
 models.sequelize
   .sync()
   .then(() => {
-    server.listen(process.env.PORT);
+    server.listen(config.serverPort);
     server.on('listening', () => console.log(`Servidor rodando na porta ${config.serverPort}`)); // tslint:disable-line
     server.on('error', (error: NodeJS.ErrnoException) => console.log(`Ocorreu um erro: ${error}`)); // tslint:disable-line
   },

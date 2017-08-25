@@ -15,6 +15,13 @@ describe('Testes de Integração', () => {
     password: 'teste',
   };
 
+  const userDefault = {
+    id: 1,
+    name: 'Default Teste',
+    email: 'default@emai.com',
+    password: 'default',
+  };
+
   beforeEach((done) => {
     model.User.destroy({
       where: {},
@@ -29,13 +36,6 @@ describe('Testes de Integração', () => {
           });
       });
   });
-
-  const userDefault = {
-    id: 1,
-    name: 'Default Teste',
-    email: 'default@emai.com',
-    password: 'default',
-  };
 
   describe('GET /api/users/all', () => {
     it('Deve retornar um Array com todos os Usúarios', (done) => {
