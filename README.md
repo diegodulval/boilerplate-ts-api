@@ -1,4 +1,4 @@
-# Moment's Api
+# Moment's API
 
 One Paragraph of project description goes here
 
