@@ -1,0 +1,4 @@
+--require ./helpers.js
+--report spec
+--watch-extension js
+--slow 5000

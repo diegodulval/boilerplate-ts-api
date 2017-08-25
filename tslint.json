@@ -1,0 +1,16 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "object-literal-sort-keys": [true, "ignore-case"],
+    "quotemark": [
+      false,
+      "double"
+    ],
+    "no-var-requires": true
+  },
+  "rulesDirectory": []
+}
