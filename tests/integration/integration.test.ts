@@ -109,7 +109,7 @@ describe('Testes de Integração', () => {
   describe('DELETE /api/users/:id/destroy', () => {
     it('Deve deletar um Usúario', (done) => {
       request(app)
-        .delete(`/api/users/${1}/destroy`)
+        .delete(`/api/users/${userTest.id}/destroy`)
         .end((error, res) => {
           expect(res.status).to.equal(HTTPStatus.OK);
           expect(res.body.payload[0]).to.eql(1);
