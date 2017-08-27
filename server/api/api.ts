@@ -9,6 +9,7 @@ import Routes from './routes/routes';
 class Api {
 
   public express: Application;
+  public auth;
 
   constructor() {
     this.express = express();
@@ -20,11 +21,11 @@ class Api {
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
     this.express.use(errorHandlerApi);
-    this.router(this.express);
+    this.router(this.express, this.auth);
   }
 
-  public router(app: Application): void {
-    new Routes(app); //tslint:disable-line
+  public router(app: Application, auth: any): void {
+    new Routes(app, auth); //tslint:disable-line
   }
 
 }
