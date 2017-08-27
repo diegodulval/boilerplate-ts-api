@@ -24,4 +24,3 @@ class TokenRoutes {
 }
 
 export default TokenRoutes;
-
