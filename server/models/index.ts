@@ -7,21 +7,25 @@ const basename  = path.basename(module.filename);
 const config    = require('../config/env/config')();
 const env       = config.env || 'development';
 const db: any   = {};
-let sequelize;
 
+let sequelize;
 if (config.dbURL) {
   sequelize = new Sequelize(config.dbURL);
 } else {
   sequelize = new Sequelize(config.db, config.username, config.password);
 }
-
+console.log(__dirname); //tslint:disable-line
 fs
   .readdirSync(__dirname)
   .filter((file) => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    let extension = '.js';
+    if (process.env.NODE_ENV === 'development') {
+      extension = '.ts';
+    }
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === `${extension}`);
   })
   .forEach((file) => {
-    const model = sequelize['import'](path.join(__dirname, file));
+    const model = sequelize['import'](path.join(__dirname, file)); //tslint:disable-line
     db[model.name] = model;
   });
 
