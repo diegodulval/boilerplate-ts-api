@@ -5,6 +5,8 @@
   ],
   "jsRules": {},
   "rules": {
+    "arrow-parens": false,
+    "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
     "object-literal-sort-keys": [true, "ignore-case"],
     "quotemark": [
       false,
