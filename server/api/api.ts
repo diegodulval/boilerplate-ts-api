@@ -29,7 +29,7 @@ class Api {
   }
 
   public router(app: Application, auth: any): void {
-    new Routes(app, auth); //tslint:disable-line
+    Routes.initRoutes(app, auth);
   }
 
 }
