@@ -13,13 +13,18 @@ if (config.dbURL) {
 else {
     sequelize = new Sequelize(config.db, config.username, config.password);
 }
+console.log(__dirname); //tslint:disable-line
 fs
     .readdirSync(__dirname)
     .filter(function (file) {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    var extension = '.js';
+    if (process.env.NODE_ENV === 'development') {
+        extension = '.ts';
+    }
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === "" + extension);
 })
     .forEach(function (file) {
-    var model = sequelize['import'](path.join(__dirname, file));
+    var model = sequelize['import'](path.join(__dirname, file)); //tslint:disable-line
     db[model.name] = model;
 });
 Object.keys(db).forEach(function (modelName) {

@@ -1,23 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var HTTPStatus = require("http-status");
+var jwt = require("jwt-simple");
 var helpers_1 = require("./config/helpers");
+var model = require('../../server/models');
 describe('Testes de Integração', function () {
     'use strict';
     var config = require('../../server/config/env/config')();
-    var model = require('../../server/models');
     var id;
+    var token;
     var userTest = {
         id: 100,
-        name: 'Usuário Teste',
-        email: 'teste@emai.com',
-        password: 'teste',
+        name: 'User Test',
+        email: 'test@email.com',
+        password: 'test',
     };
     var userDefault = {
         id: 1,
-        name: 'Default Teste',
-        email: 'default@emai.com',
-        password: 'default',
+        name: 'Dulval',
+        email: 'diego@email.com',
+        password: '123',
     };
     beforeEach(function (done) {
         model.User.destroy({
@@ -29,14 +31,47 @@ describe('Testes de Integração', function () {
             .then(function (user) {
             model.User.create(userTest)
                 .then(function () {
+                token = jwt.encode({ id: user.id }, config.secret);
                 done();
             });
         });
     });
+    describe('POST /token', function () {
+        it('Deve receber um JWT', function (done) {
+            var credentials = {
+                email: userDefault.email,
+                password: userDefault.password,
+            };
+            helpers_1.request(helpers_1.app)
+                .post('/token')
+                .send(credentials)
+                .end(function (error, res) {
+                helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
+                helpers_1.expect(res.body.token).to.equal("" + token);
+                done(error);
+            });
+        });
+        it('Não deve gerar Token', function (done) {
+            var credentials = {
+                email: 'dito@email.com',
+                password: 'galocego',
+            };
+            helpers_1.request(helpers_1.app)
+                .post('/token')
+                .send(credentials)
+                .end(function (error, res) {
+                helpers_1.expect(res.status).to.equal(HTTPStatus.UNAUTHORIZED);
+                helpers_1.expect(res.body).to.empty; // tslint:disable-line
+                done(error);
+            });
+        });
+    });
     describe('GET /api/users/all', function () {
-        it('Deve retornar um Array com todos os Usúarios', function (done) {
+        it('Deve retornar um Array com todos os Usuários', function (done) {
             helpers_1.request(helpers_1.app)
                 .get('/api/users/all')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
                 helpers_1.expect(res.body.payload).to.be.an('array');
@@ -47,36 +82,37 @@ describe('Testes de Integração', function () {
         });
     });
     describe('GET /api/users/:id', function () {
-        it('Deve retornar um Json com apenas um Usúario', function (done) {
+        it('Deve retornar um Array com apenas um Usuário', function (done) {
             helpers_1.request(helpers_1.app)
                 .get("/api/users/" + userDefault.id)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
-                helpers_1.expect(res.body.payload.id).to.be.equal(userDefault.id);
-                helpers_1.expect(res.body.payload).to.have.all.keys([
-                    'id', 'name', 'email', 'password',
-                ]);
-                id = res.body.payload.id;
+                helpers_1.expect(res.body.payload.id).to.equal(userDefault.id);
+                helpers_1.expect(res.body.payload).to.have.all.keys(['id', 'name', 'email', 'password']);
                 done(error);
             });
         });
     });
     describe('POST /api/users/create', function () {
-        it('Deve criar um novo Usúario', function (done) {
+        it('Deve criar um novo Usuário', function (done) {
             var user = {
                 id: 2,
-                name: 'Usuario Teste',
-                email: 'usuarioteste@email.com',
-                password: 'novouser',
+                name: 'New User',
+                email: 'user@email.com',
+                password: 'newuser',
             };
             helpers_1.request(helpers_1.app)
                 .post('/api/users/create')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', "JWT " + token)
                 .send(user)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
-                helpers_1.expect(res.body.payload.id).to.be.equals(user.id);
-                helpers_1.expect(res.body.payload.name).to.be.equals(user.name);
-                helpers_1.expect(res.body.payload.email).to.be.equals(user.email);
+                helpers_1.expect(res.body.payload.id).to.eql(user.id);
+                helpers_1.expect(res.body.payload.name).to.eql(user.name);
+                helpers_1.expect(res.body.payload.email).to.eql(user.email);
                 done(error);
             });
         });
@@ -84,11 +120,13 @@ describe('Testes de Integração', function () {
     describe('PUT /api/users/:id/update', function () {
         it('Deve atualizar um Usuário', function (done) {
             var user = {
-                name: 'TestUpdate',
+                name: 'UserUpdate',
                 email: 'update@email.com',
             };
             helpers_1.request(helpers_1.app)
                 .put("/api/users/" + userTest.id + "/update")
+                .set('Content-Type', 'application/json')
+                .set('Authorization', "JWT " + token)
                 .send(user)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
@@ -98,12 +136,14 @@ describe('Testes de Integração', function () {
         });
     });
     describe('DELETE /api/users/:id/destroy', function () {
-        it('Deve deletar um Usúario', function (done) {
+        it('Should delete an User', function (done) {
             helpers_1.request(helpers_1.app)
-                .delete("/api/users/" + 1 + "/destroy")
+                .del("/api/users/" + userTest.id + "/destroy")
+                .set('Content-Type', 'application/json')
+                .set('Authorization', "JWT " + token)
                 .end(function (error, res) {
                 helpers_1.expect(res.status).to.equal(HTTPStatus.OK);
-                helpers_1.expect(res.body.payload[0]).to.eql(1);
+                helpers_1.expect(res.body.payload).to.eql(1);
                 done(error);
             });
         });
