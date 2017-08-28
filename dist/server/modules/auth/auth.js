@@ -22,4 +22,4 @@ var TokenRoutes = (function () {
     };
     return TokenRoutes;
 }());
-exports.default = TokenRoutes;
+exports.default = new TokenRoutes();
