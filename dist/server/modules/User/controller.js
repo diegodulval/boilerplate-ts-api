@@ -5,7 +5,7 @@ var handlers_1 = require("../../api/responses/handlers");
 var service_1 = require("./service");
 var UserController = (function () {
     function UserController() {
-    } //tslint:disable-line
+    }
     UserController.prototype.getAll = function (req, res) {
         service_1.default.getAll()
             .then(_.partial(handlers_1.default.onSucess, res))
@@ -38,4 +38,4 @@ var UserController = (function () {
     };
     return UserController;
 }());
-exports.default = UserController;
+exports.default = new UserController();

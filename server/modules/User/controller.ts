@@ -7,8 +7,6 @@ import Handlers from "../../api/responses/handlers";
 import User from "./service";
 
 class UserController {
-  constructor() {} //tslint:disable-line
-
   public getAll(req: Request, res: Response) {
     User.getAll()
       .then(_.partial(Handlers.onSucess, res))
@@ -47,4 +45,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default new UserController();

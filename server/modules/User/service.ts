@@ -10,8 +10,6 @@ class User implements IUser {
   public email: string;
   public password: string;
 
-  constructor() { } // tslint:disable-line
-
   public create(user: any) {
     return model.User.create(user);
   }
