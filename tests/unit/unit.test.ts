@@ -11,8 +11,7 @@ describe("Testes Unitarios do Controller", () => {
         email: "newuser@email.com",
         password: "pinkfloyd",
       };
-      const user = new User();
-      return user.create(newUser).then((data) => {
+      return User.create(newUser).then((data) => {
         expect(data.dataValues).to.have.all.keys([
           "email",
           "id",
@@ -27,8 +26,7 @@ describe("Testes Unitarios do Controller", () => {
 
   describe("Método GET Users", () => {
     it("Deve retornar uma lista com todos os Usúario", () => {
-      const user = new User();
-      return user.getAll().then((data) => {
+      return User.getAll().then((data) => {
         expect(data).to.be.an("array");
         expect(data[0]).to.have.all.keys(["email", "id", "name", "password"]);
       });
@@ -41,8 +39,7 @@ describe("Testes Unitarios do Controller", () => {
         name: "UpdateUser",
         email: "updateuser@email.com",
       };
-      const user = new User();
-      return user.update(500, updateUser).then((data) => {
+      return User.update(500, updateUser).then((data) => {
         expect(data[0]).to.be.equal(1);
       });
     });
@@ -50,8 +47,7 @@ describe("Testes Unitarios do Controller", () => {
 
   describe("Método getById", () => {
     it("Deve retornar um Usúario de acordo com o ID informado", () => {
-      const user = new User();
-      return user.getById(500).then((data) => {
+      return User.getById(500).then((data) => {
         expect(data).to.have.all.keys(["email", "id", "name", "password"]);
       });
     });
@@ -59,8 +55,7 @@ describe("Testes Unitarios do Controller", () => {
 
   describe("Método getByEmail", () => {
     it("Deve retornar um Usúario de acordo com o ID informado", () => {
-      const user = new User();
-      return user.getByEmail("diego@email.com").then((data) => {
+      return User.getByEmail("diego@email.com").then((data) => {
         expect(data).to.have.all.keys(["email", "id", "name", "password"]);
       });
     });
@@ -68,8 +63,7 @@ describe("Testes Unitarios do Controller", () => {
 
   describe("Método Delete", () => {
     it("Deve deletar um Usúario", () => {
-      const user = new User();
-      return user.delete(500).then((data) => {
+      return User.delete(500).then((data) => {
         expect(data).to.be.equal(1);
       });
     });

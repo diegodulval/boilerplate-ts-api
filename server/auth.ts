@@ -7,16 +7,15 @@ import User from "./modules/User/service";
 const config = require("./config/env/config")();
 
 class Auth {
-  config() {
-    const UserService = new User();
-    let opts = {
+  public config() {
+    const opts = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
       secretOrKey: config.secret,
     };
 
     passport.use(
       new Strategy(opts, (jwtPayload, done) => {
-        UserService.getById(jwtPayload.id)
+        User.getById(jwtPayload.id)
           .then(user => {
             if (user) {
               return done(null, {
@@ -32,8 +31,8 @@ class Auth {
       }));
 
     return {
-      initialize: () => passport.initialize(),
       authenticate: () => passport.authenticate('jwt', { session: false }),
+      initialize: () => passport.initialize(),
     };
   }
 }

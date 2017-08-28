@@ -8,13 +8,12 @@ var Auth = (function () {
     function Auth() {
     }
     Auth.prototype.config = function () {
-        var UserService = new service_1.default();
         var opts = {
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderWithScheme("jwt"),
             secretOrKey: config.secret,
         };
         passport.use(new passport_jwt_1.Strategy(opts, function (jwtPayload, done) {
-            UserService.getById(jwtPayload.id)
+            service_1.default.getById(jwtPayload.id)
                 .then(function (user) {
                 if (user) {
                     return done(null, {
@@ -29,8 +28,8 @@ var Auth = (function () {
             });
         }));
         return {
-            initialize: function () { return passport.initialize(); },
             authenticate: function () { return passport.authenticate('jwt', { session: false }); },
+            initialize: function () { return passport.initialize(); },
         };
     };
     return Auth;

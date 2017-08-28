@@ -4,7 +4,7 @@ var interface_1 = require("./interface");
 var model = require('../../models');
 var User = (function () {
     function User() {
-    }
+    } // tslint:disable-line
     User.prototype.create = function (user) {
         return model.User.create(user);
     };
@@ -41,4 +41,4 @@ var User = (function () {
     };
     return User;
 }());
-exports.default = User;
+exports.default = new User();
