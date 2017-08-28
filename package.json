@@ -14,9 +14,12 @@
     "builded": "cross-env NODE_ENV=test node ./dist/server/server.js",
     "unit-test": "cross-env NODE_ENV=test mocha --opts mocha.opts ./dist/tests/unit/unit.test.js",
     "integration-test": "cross-env NODE_ENV=test mocha --opts mocha.opts ./dist/tests/integration/integration.test.js",
+    "integration-coverage": "nyc --reporter=html npm integration-test",
+    "unit-coverage": "nyc --reporter=html npm unit-test",
     "prepush": "npm run lint"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.1",
     "@types/bluebird": "^3.5.8",
     "@types/body-parser": "^1.16.4",
     "@types/chai": "^4.0.2",
@@ -38,7 +41,9 @@
     "http": "0.0.0",
     "http-server": "^0.9.0",
     "husky": "^0.14.3",
+    "istanbul": "^0.4.5",
     "mocha": "^3.5.0",
+    "nyc": "^10.3.2",
     "supertest": "^3.0.0",
     "testdouble": "^3.2.4",
     "ts-node": "^3.3.0",
@@ -46,6 +51,7 @@
     "typescript": "^2.4.2"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",

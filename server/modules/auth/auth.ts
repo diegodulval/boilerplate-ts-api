@@ -12,11 +12,11 @@ class TokenRoutes {
     const credentials = {
       email: req.body.email,
       password: req.body.password,
-    }
+    };
 
     if (credentials.hasOwnProperty('email') && credentials.hasOwnProperty('password')) {
       UserService
-        .getById(credentials.email)
+        .getByEmail(credentials.email)
         .then(_.partial(authSucess, res, credentials))
         .catch(_.partial(authFail, req, res));
     }

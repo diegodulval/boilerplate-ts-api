@@ -8,7 +8,7 @@ export default function AuthConfig() {
 
   const opts = {
     secretOrKey: config.secret,
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
   };
 
   passport.use(new Strategy(opts, (jwtPayload, done) => {
